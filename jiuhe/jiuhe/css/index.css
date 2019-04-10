@@ -1,0 +1,147 @@
+a{text-decoration: none;}
+li{list-style: none;}
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+
+
+.clear{clear: both;}
+
+.header{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 34px;
+    padding: 20px 0;
+    background: rgba(255, 255, 255, 0);
+    z-index: 999;
+}
+.headeractive{
+    background: rgba(255, 255, 255);
+}
+.headerWarp,.serviceWarp,.caseWarp{
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.headerWarp .logo{
+    float: left;
+}
+.headerWarp .logo a{
+    display: block;
+    width:128px;
+    height: 34px;
+    position: relative;
+}
+/* img{max-width: 100%;} */
+.header .logo a img{position:absolute;top: 0;left:0;}
+.header .logo a:nth-child(2){display: none;}
+.header.headeractive .logo a:nth-child(1){display: none;}
+.header.headeractive .logo a:nth-child(2){display: block;}
+.header.headeractive .headerList a{color: #000000}
+
+.rightButton{position: fixed;top:360px;right:58px;z-index: 2;}
+.rightButton ul li{height:13px;width: 12px;border-radius: 50%;background: #bcbcbc;z-index: 1;margin-top: 15px;}
+.rightButton ul li.active{background: #ffd564}
+
+.header .headerList{float: right;}
+.header .headerList li{float: left;padding-left: 102px;}
+.header .headerList li a{height: 34px;;line-height: 34px;color: #ffffff;font-size: 14px;}
+.banner li ,.rightButton li{cursor: pointer;}
+.banner .bannerText{position: absolute;left:50%;margin-left:-225px;margin-top: 160px;top:0;  text-align: center;z-index: 2;}
+.banner{width: 100%;height: 768px;position: relative;overflow: hidden;text-align: center;}
+.banner h2{color: #ffffff;font-size: 55px;line-height: 55px;}
+.banner .bannerListP{color: #ffffff;font-size: 31px;line-height: 31px;padding: 20px 0 28px 0;}
+.banner  a{color: #ffd564;font-size: 18px;line-height: 18px;border: 1px solid #ffd564;border-radius: 10px;padding: 9px 35px;}
+.banner .bannerList1{position: absolute;width: 5760px;}
+.banner .bannerList1 div{ float: left;}
+.banner .buttons{position: absolute;bottom: 25px;left: 50%;margin-left:-88px;}
+.banner .buttons li{display: inline-block;width: 50px;height: 4px;background: #ffffff;float:left;margin-left:9px; }
+.banner .buttons li.active{background: #fa9533}
+.banner .petal{position: absolute;bottom:170px;left:50%;margin-left:-35px;background: url(../images/banner_Logo.png)no-repeat center;height: 73px;width: 70px;}
+
+.service h2{text-align: center;font-size: 48px;color:#000000;padding:32px 0 35px ;}
+.service li{float: left;width: 31%;padding: 1%;}
+.service a{display: block;height: 304px;width: 100%;background: #fe6f00;text-align: center;color:#ffffff;font-size: 28px;}
+.service ul li:nth-child(2) a {background: #63cfd1;}
+.service ul li:nth-child(3) a {background: #42bde3;}
+.service ul li:nth-child(4) a {background: #5bbca5;}
+.service ul li:nth-child(5) a {background: #7164b9;}
+.service ul li:nth-child(6) a {background: #f5d344;}
+.service .serviceWarp a img{height: 129px;padding:74px 0 30px 0; }
+.service .serviceWarp a img:hover{
+    transform: scale(1.3);
+    -moz-transform:scale(1.3);/* Firefox 4 */
+    -webkit-transform: scale(1.3);/* Safari 和 Chrome */
+    -o-transform:scale(1.3);/* Opera */
+}
+
+.case{background: #ffd564;max-width: 100%;}
+.case .caseWarp{height: 768px;}
+.case .caseWarp h2{color: #ffffff;text-align: center;font-size: 48px;padding:32px 0 46px ;}
+
+.case .caseWarp .casePhoto{position: relative;width: 256px;height:337px;margin: 105px 0 0 73px;float: left}
+.case .caseWarp .man{background:url(../images/case_1-1.png)no-repeat ;width: 226px;height: 303px;position: absolute;top:0;left:0;z-index:1}
+.case .caseWarp .triangle{background:url(../images/case_1-2.png)no-repeat center; width:252px;height: 79px;position: absolute;top:0;left:0;z-index:3}
+.case .caseWarp .round{
+    background:url(../images/case_1-3.png)no-repeat center;width: 122px;height: 124px;position: absolute;top: -35px;left: 70px;z-index:2;
+    -webkit-animation: circleRoate 3s infinite linear;
+}
+@-webkit-keyframes circleRoate{  
+    from{transform: rotate(0deg);}  
+    to{transform: rotate(360deg);}  
+}  
+.caseListL{float: left;width: 60%;}
+.caseListR{float: right;width: 40%;}
+.caseListR a{display: block;height: 289px;padding: 0 0 6px 4px;}
+.caseList{width: 68%;float: right}
+.caseList p{padding: 16px 0;font-size: 18px;color: #000000;display: none;}
+
+.caseList .caseListL img{width:100%;}
+.caseList .caseListL a:nth-child(1){display: block;;padding-left: 35px;height: 588px;}
+.caseList .caseListL a:nth-child(1) img{height:100%;}
+.caseList .caseListR img{width:100%; height: 100%;}
+
+.caseList .caseListL a:nth-child(1):hover img{height: 88%;}
+.caseList .caseListL a:nth-child(1):hover p{display: block;}
