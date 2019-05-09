@@ -13,12 +13,12 @@
     <div class="swiper">
       <swiper :options="swiperOption" ref="mySwiper" >
     <!-- slides -->
-    <swiper-slide v-for="item in swiperlist"><img :src="item.image" class="swiper-img"><span class="title">{{item.title}}</span></swiper-slide>
+    <swiper-slide v-for="(item,index) in swiperlist" :key="index"><img :src="item.image" class="swiper-img"><span class="title">{{item.title}}</span></swiper-slide>
     <!-- Optional controls -->
     <div class="swiper-pagination"  slot="pagination"></div>
   </swiper>
     </div>
-    <NewsList :NewsL='swiperlist'></NewsList>
+    <NewsList :NewsL='NewsList'></NewsList>
   </div>
 </template>
 
@@ -28,8 +28,10 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App',
+      isLoading: false,
+      scrollNum: 0,
       swiperlist:[],
+      NewsList:[],
       swiperOption:{
           // some swiper options/callbacks
           // 所有的参数同 swiper 官方 api 参数
@@ -46,25 +48,14 @@ export default {
   },
   created(){
     var url = '/api/4/news/latest'; // 这里就是刚才的config/index.js中的/api
-    let _this = this;
-    // this.$axios.get(url)
-    // .then(function(response) {
-    //   console.log(response.data.stories);
-    //   console.log(this);//这个this和_thi
-    //   console.log(_this.swiperlist)
-    // })
-    // .catch(function(error) {
-    //   console.log(error);
-    // });
     this.$axios.get(url)
     .then(response => {
       this.swiperlist = response.data.top_stories
-      console.log(this.swiperlist);
+      this.NewsList = response.data.stories
     })
     .catch(error =>{
       console.log(error);
     });
-
   },
   computed: {
     swiper(){
@@ -72,17 +63,62 @@ export default {
     }
   },
   mounted() {
-    console.log('this is current swiper instance object', this.swiper)
-    this.swiper.slideTo(3,1000,false)
+    // console.log('this is current swiper instance object', this.swiper)
+    this.swiper.slideTo(3,1000,false);
+    this.scroll(this.NewsList);
+    // console.log(this.NewsId)
   },
   methods:{
-    getImage(url){
-                console.log(url);
-                // 把现在的图片连接传进来，返回一个不受限制的路径
-                if(url !== undefined){
-                    return url[0].replace(/http\w{0,1}:\/\/p/g,'https://images.weserv.nl/?url=p');
-                }
-            }
+    Appendzero(obj) {
+      //添0操作
+      {
+        if (obj < 10) {
+          return "0" + "" + obj;
+        } else {
+          return obj;
+        }
+      }
+    },
+    getTimes(n) {
+      let date = new Date();
+      let date2 = date.setDate(date.getDate() - n);
+      let ajaxDate =
+        date.getFullYear() +
+        this.Appendzero(date.getMonth() + 1) +
+        this.Appendzero(date.getDate());
+      return ajaxDate;
+      },
+    scroll(num) {
+      // let isLoading = false;
+      window.onscroll = () => {
+        let bottomWindow =document.documentElement.offsetHeight -
+            document.documentElement.scrollTop -
+            window.innerHeight <=10;
+        if (bottomWindow && this.isLoading == false) {
+          this.isLoading = true;//正在加载
+          ++this.scrollNum;
+          this.getNews(this.getTimes(this.scrollNum));
+        }
+        
+      };
+    },
+    getNews(date) {
+      var url = "/api/4/news/before/" + date;
+      this.$axios.get(url)
+        .then(response => {
+          for (let i = 0; i < response.data.stories.length; i++) {
+            this.NewsList.push(response.data.stories[i]);
+          }
+          this.isLoading = false; //取消正在加载
+          console.log(this.NewsList);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    getNewsDetail(){
+      
+    }
     }
 }
 </script>
@@ -101,7 +137,6 @@ export default {
     align-items: center;
     position: fixed;
     top:0;
-    /*left: 0;*/
     height:50px;
     max-width: 768px;
     width:100%;
@@ -115,10 +150,10 @@ export default {
     font-size:20px;
     text-align: center;
     flex:0 0 50px;
-    /* padding:20px 0; */
 }
 .header .home{
     flex:1;
+        text-align: left;
 }
 .header .more{
     display:flex;
@@ -140,13 +175,7 @@ export default {
 }
  .swiper{
    margin-top:50px;
-    /* overflow:hidden;
-     width:100%;
-     height:0;
-      padding-bottom:30.48%; 
-     background: #eee; */
 } 
-
 h1, h2 {
   font-weight: normal;
 }
