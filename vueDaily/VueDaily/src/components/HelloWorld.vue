@@ -13,7 +13,18 @@
     <div class="swiper">
       <swiper :options="swiperOption" ref="mySwiper" >
     <!-- slides -->
-    <swiper-slide v-for="(item,index) in swiperlist" :key="index"><img :src="item.image" class="swiper-img"><span class="title">{{item.title}}</span></swiper-slide>
+ 
+    <swiper-slide v-for="(item,index) in swiperlist" :key="index">
+    <router-link v-bind:to="{name:'Details',params:{NewsId:item.id}}">
+    <img :src="item.image" class="swiper-img">
+    <div class="dask"></div>
+    <div class="title-swiper">
+    <span class="title">{{item.title}}</span>
+    <div class="clear"></div>
+    <p class="blue-swiper"></p> 
+    </div>
+     </router-link>
+    </swiper-slide>
     <!-- Optional controls -->
     <div class="swiper-pagination"  slot="pagination"></div>
   </swiper>
@@ -32,41 +43,45 @@ export default {
       scrollNum: 0,
       swiperlist:[],
       NewsList:[],
+      testList:[],
       swiperOption:{
+        loop: true,
+        height:280,
           // some swiper options/callbacks
           // 所有的参数同 swiper 官方 api 参数
           pagination:{
             el:'.swiper-pagination'
             },
              //分页器挂载到swiper-pagination类对应的元素上
-          loop: true  //开启轮播图前后循环模式
+          //开启轮播图前后循环模式
+          
       }
     }
   },
   components:{
-    "NewsList":NewsList
+    "NewsList":NewsList,
   },
   created(){
     var url = '/api/4/news/latest'; // 这里就是刚才的config/index.js中的/api
     this.$axios.get(url)
     .then(response => {
       this.swiperlist = response.data.top_stories
-      this.NewsList = response.data.stories
+      this.NewsList.push(response.data.stories)
+      // console.log(this.NewsList)
+      
     })
     .catch(error =>{
       console.log(error);
     });
   },
+  mounted() {
+    this.swiper.slideTo(0,1000,false);
+    this.scroll(this.NewsList);
+  },
   computed: {
     swiper(){
       return this.$refs.mySwiper.swiper
     }
-  },
-  mounted() {
-    // console.log('this is current swiper instance object', this.swiper)
-    this.swiper.slideTo(3,1000,false);
-    this.scroll(this.NewsList);
-    // console.log(this.NewsId)
   },
   methods:{
     Appendzero(obj) {
@@ -81,6 +96,7 @@ export default {
     },
     getTimes(n) {
       let date = new Date();
+      console.log(date.getDay())
       let date2 = date.setDate(date.getDate() - n);
       let ajaxDate =
         date.getFullYear() +
@@ -88,6 +104,12 @@ export default {
         this.Appendzero(date.getDate());
       return ajaxDate;
       },
+    getTitleTimes(n){
+      let date =new Date(n);
+      let TitleDate = (date.getMonth()+1)+'月'+date.getDate()+'日' + "星期" + "日一二三四五六".charAt(date.getDay())
+      console.log(TitleDate)
+      return TitleDate;
+    },
     scroll(num) {
       // let isLoading = false;
       window.onscroll = () => {
@@ -98,26 +120,24 @@ export default {
           this.isLoading = true;//正在加载
           ++this.scrollNum;
           this.getNews(this.getTimes(this.scrollNum));
-        }
-        
+        }   
       };
     },
     getNews(date) {
-      var url = "/api/4/news/before/" + date;
+      let url = "/api/4/news/before/" + date;
       this.$axios.get(url)
         .then(response => {
-          for (let i = 0; i < response.data.stories.length; i++) {
-            this.NewsList.push(response.data.stories[i]);
-          }
+          this.NewsList.push(response.data.stories)
+          console.log(this.NewsList)
+          this.getTitleTimes(parseInt(this.getTimes(this.scrollNum)));
           this.isLoading = false; //取消正在加载
-          console.log(this.NewsList);
         })
         .catch(error => {
           console.log(error);
         });
     },
-    getNewsDetail(){
-      
+    addTime(date){
+      // console.log(date)
     }
     }
 }
@@ -153,7 +173,7 @@ export default {
 }
 .header .home{
     flex:1;
-        text-align: left;
+    text-align: left;
 }
 .header .more{
     display:flex;
@@ -176,6 +196,7 @@ export default {
  .swiper{
    margin-top:50px;
 } 
+
 h1, h2 {
   font-weight: normal;
 }
@@ -192,7 +213,22 @@ a {
 }
 </style>
 <style>
-.swiper-img{width:100%;}
+.clear{
+  clear: both;
+}
+.dask{
+   background: #000;
+    opacity:0.05; filter: alpha(opacity=5);
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.swiper-img{
+    width:100%;
+}
 .swiper .swiper-container .swiper-slide{
   position: relative;
 }
@@ -200,29 +236,40 @@ a {
     position: absolute;
     top:-20%;
     left:0;
-        
 }
-.swiper .swiper-container .swiper-slide .title{
+.swiper .swiper-container .swiper-slide .title-swiper{
   position: absolute;
-  bottom:25px;
-  left:0;
+  top:60%;
+  right:5%;
+  width: 65%;
+  text-align: right;
+
+}
+.swiper .swiper-container .swiper-slide .title-swiper .title{
   color:#fff;
   font-size:18px;
-  line-height:20px;
-  padding:0 10px;
-  text-align: left;
+  display: inline-block;
+  line-height: 25px;
+  
+}
+.swiper .swiper-container .swiper-slide .title-swiper .blue-swiper{
+  margin-top:5px;
+  border:2px solid #359dda;
+  width:120px;
+  border-radius: 5px;
+  float: right;
 }
 .swiper .swiper-pagination-bullet-active{
     background:#fff
     }
     @media (max-width: 520px) and (min-width: 320px){
       .swiper .swiper-container {
-     height: 200px;
+     height: 220px;
     }
     }
     @media (min-width: 640px){
     .swiper .swiper-container {
-    height: 280px;}
+    height: 300px;}
     }
 
 </style>

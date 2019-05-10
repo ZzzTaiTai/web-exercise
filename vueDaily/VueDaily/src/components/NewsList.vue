@@ -1,12 +1,16 @@
 <template>
   <div class="NewsList">
-    <div class="newsItem">
-      <div class="list" v-for="item in nList" id="item.id">
+    <div v-for="(itemL,indexL) in nList">
+        <p class="time">{{itemL[0].ga_prefix}}</p>
+      <div class="clear"></div>
+    <div class="newsItem"v-for="(item,index) in nList[indexL]">
+      <div class="list">
         <router-link v-bind:to="{name:'Details',params:{NewsId:item.id}}">
         <img :src="item.images[0]" alt>
         <span class="text">{{item.title}}</span>
         </router-link>
       </div>
+    </div>
     </div>
   </div>
 </template>
@@ -23,22 +27,23 @@ export default {
   watch: {
     NewsL(val) {
       this.nList = val;
-    }
+      // console.log(this.nList)
+    },
   },
   created() {
+    
   },
   methods: {
-  }
+  },
+ 
 };
 </script>
 
 <style scoped>
+.newsItem{
+
+}
 .newsItem .list {
-  display: flex;
-  display: -webkit-flex;
-  align-items: center;
-  position: relative;
-  top: -20px;
   margin: 0 auto;
   width: 90%;
   border-radius: 5px;
@@ -53,14 +58,20 @@ export default {
     margin-left: 15px;
     text-align: left;
     color:#333;
-    display: inline;
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
 }
 .newsItem .list img {
- 
-  height: 80px;
+  height: 70px;
 }
 .newsItem .list span.text {
   font-size: 14px;
   margin-left: 15px;
+}
+.NewsList .time{
+  float: left;
+  margin: 10px 25px
+
 }
 </style>

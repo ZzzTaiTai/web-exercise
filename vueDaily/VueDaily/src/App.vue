@@ -1,6 +1,9 @@
 <template>
   <div id="app">
+    <keep-alive include="HelloWorld">
+       <!-- 只有路径匹配到的视图 a 组件会被缓存！ -->
     <router-view/>
+    </keep-alive>
   </div>
 </template>
 
@@ -24,6 +27,10 @@ body,h1,h2,h3,h4,h5,h6,hr,p,blockquote,dl,dt,dd,ul,ol,li,button,input,textarea,t
 * {
     margin: 0;
     padding: 0;
+}
+.NewsDetails .content-wrapper .main-wrap .headline{
+    display: none;
+    height: 0;
 }
 
 </style>
