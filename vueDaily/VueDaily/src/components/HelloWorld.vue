@@ -1,12 +1,12 @@
 <template>
   <div class="hello">
     <div class="header">
-        <i class="icon-menu fa fa-align-left fa-inverse "></i>
+        <i class="icon-menu fa fa-align-left fa-inverse" @click="showthemeList"></i>
         <div class="home">
-            <span class="text" >首页</span>
+            <span class="text" @click="handleScroll" >首页</span>
         </div>
         <div class="more">
-            <i class="icon-bell fa fa-bell fa-inverse "></i>
+            <i class="icon-bell fa fa-bell fa-inverse " ></i>
             <i class="icon-more fa fa-ellipsis-v fa-inverse "></i>
         </div>
     </div>
@@ -30,7 +30,31 @@
   </swiper>
     </div>
     <NewsList :NewsL='NewsList'></NewsList>
+    <div class="Navdask" @click="showthemeList"></div>
+    <div class="sideNavleft ">
+    <div class="sideNav-header">
+        <div class="user">
+            <div class="avatar">
+            <img class="images" src="https://avatars0.githubusercontent.com/u/18193168" alt="">
+            </div>
+        </div>
+        <span class="userName">Tai</span>
+        <div class="github">
+            <i class="fa fa-github "></i>
+            <a  class="githubUrl" href="javascript:;">www.github.com</a>
+        </div>
+    </div>
+    <div class="themeList">
+    <ul>
+        <li class="lists">
+          <span class="text">首页</span>
+          <i class="fa fa-plus"></i>
+        </li>
+    </ul>
   </div>
+  </div>
+  </div>
+  
 </template>
 
 <script>
@@ -94,20 +118,32 @@ export default {
         }
       }
     },
+    showthemeList(){
+      let dask = document.getElementsByClassName('Navdask')[0];
+      let Navleft = document.getElementsByClassName('sideNavleft')[0];
+      if(dask.className.indexOf("isactive")>0){
+        dask.classList.remove("isactive");
+        Navleft.classList.remove("isactive");
+      }else{
+        dask.classList.add("isactive");
+        Navleft.classList.add("isactive");
+      }
+      
+    },
     getTimes(n) {
       let date = new Date();
-      console.log(date.getDay())
-      let date2 = date.setDate(date.getDate() - n);
+      date.setDate(date.getDate() - n);
       let ajaxDate =
         date.getFullYear() +
         this.Appendzero(date.getMonth() + 1) +
         this.Appendzero(date.getDate());
+        // console.log(ajaxDate)
       return ajaxDate;
       },
     getTitleTimes(n){
-      let date =new Date(n);
+      let date =new Date()
+      date.setDate(date.getDate() - n);
       let TitleDate = (date.getMonth()+1)+'月'+date.getDate()+'日' + "星期" + "日一二三四五六".charAt(date.getDay())
-      console.log(TitleDate)
       return TitleDate;
     },
     scroll(num) {
@@ -128,16 +164,27 @@ export default {
       this.$axios.get(url)
         .then(response => {
           this.NewsList.push(response.data.stories)
-          console.log(this.NewsList)
-          this.getTitleTimes(parseInt(this.getTimes(this.scrollNum)));
+          // console.log(this.NewsList)
+          this.NewsList[this.NewsList.length - 1][0].time = this.getTitleTimes(this.scrollNum)
           this.isLoading = false; //取消正在加载
         })
         .catch(error => {
           console.log(error);
         });
     },
-    addTime(date){
-      // console.log(date)
+    handleScroll(){
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+      // var cHeight=window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight;
+      var offsetTopList = document.querySelectorAll('.piece')
+      // console.log(offsetTopList)
+      for(let i = 0;i<offsetTopList.length;i++){
+         console.log(offsetTopList[i].offsetTop)
+      }
+      // document.querySelectorAll('.piece')[0].scrollTop
+      // document.querySelectorAll('.piece')[1].offsetTop,
+      // document.querySelectorAll('.piece')[2].offsetTop,
+      // document.querySelectorAll('.piece')[3].offsetTop,
+     
     }
     }
 }
@@ -149,7 +196,7 @@ export default {
     width: 100%;
     max-width: 768px;
     margin: 0 auto;
-    background: hsla(0,0%,94%,.8);
+    /* background: hsla(0,0%,94%,.8); */
 }
 .header{
     display: flex;
@@ -193,6 +240,85 @@ export default {
     flex:0 0 50px;
     text-align: center;
 }
+
+.sideNavleft{
+  display: none;
+  position: fixed;
+  top: 0;
+  left:0;
+  width: 85%;
+  height: 100%;
+  z-index: 10;
+  background: #fff;
+}
+ .Navdask{
+  display: none;
+  position: fixed;
+  top: 0;
+  left:0;
+  width: 100%;
+  height: 100%;
+  z-index:9;
+   background: #000;
+    opacity:0.15; filter: alpha(opacity=15);
+  
+}
+.sideNavleft .sideNav-header{
+    padding: 20px 0 20px 10px;
+    width: 100%;
+    box-sizing: border-box;
+    background: #359dda;
+   
+    
+}
+.sideNavleft .sideNav-header .user{ 
+    display:inline-block; 
+
+}
+.sideNavleft .sideNav-header .user .avatar{ 
+    display:inline-block; 
+    width:25px;
+    height:25px;
+    border-radius: 50%;
+    overflow:hidden;
+    vertical-align: middle;
+
+}
+.sideNavleft .sideNav-header .github{
+    margin-top:5px;
+}
+.sideNavleft .sideNav-header .user img.images
+{
+  width:100%;
+}
+.sideNavleft .sideNav-header .github i{
+    padding-left:1px;
+    font-size: 24px;
+    vertical-align: middle;
+}
+.themeList{
+  background: hsla(0,0%,94%,.9);
+  /* background: rgba(0,0,0,.2);
+  z-index: 5;
+  position: fixed;
+  top: 0;
+  left:0;
+  width: 100%;
+  height: 100%; */
+}
+.themeList .lists{ 
+    padding: 0px 10px;
+
+    height: 50px;
+    line-height:50px;
+    
+}
+.themeList .lists text{ 
+    font-size:16px;
+}
+.isactive{
+  display: block;
+}
  .swiper{
    margin-top:50px;
 } 
@@ -209,7 +335,7 @@ li {
   margin: 0 10px;
 }
 a {
-  color: #42b983;
+  cursor: pointer;
 }
 </style>
 <style>
